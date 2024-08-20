@@ -38,6 +38,7 @@ class MangaDex extends models_1.MangaParser {
                         chapterNumber: chapter.attributes.chapter,
                         volumeNumber: chapter.attributes.volume,
                         pages: chapter.attributes.pages,
+                        language: chapter.attributes.translatedLanguage,
                     });
                 }
                 const findCoverArt = data.data.relationships.find((rel) => rel.type === 'cover_art');

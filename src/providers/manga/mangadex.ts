@@ -39,6 +39,7 @@ class MangaDex extends MangaParser {
           chapterNumber: chapter.attributes.chapter,
           volumeNumber: chapter.attributes.volume,
           pages: chapter.attributes.pages,
+          language: chapter.attributes.translatedLanguage,
         });
       }
 
