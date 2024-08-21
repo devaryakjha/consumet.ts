@@ -98,12 +98,23 @@ class ComicK extends models_1.MangaParser {
                 for (const manga of data) {
                     let cover = manga.md_covers ? manga.md_covers[0] : null;
                     if (cover && cover.b2key != undefined) {
-                        cover = `https://meo.comick.pictures${cover.b2key}`;
+                        cover = `https://meo2.comick.pictures/${cover.b2key}`;
+                    }
+                    const altTitles = [];
+                    if (manga.md_titles != null) {
+                        for (const title of manga.md_titles) {
+                            const val = title.title;
+                            const key = 'en';
+                            const altTitle = {
+                                [key]: val,
+                            };
+                            altTitles.push(altTitle);
+                        }
                     }
                     results.results.push({
                         id: manga.slug,
                         title: (_a = manga.title) !== null && _a !== void 0 ? _a : manga.slug,
-                        altTitles: manga.md_titles ? manga.md_titles.map(title => title.title) : [],
+                        altTitles: altTitles,
                         image: cover,
                     });
                 }
