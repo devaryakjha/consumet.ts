@@ -11,7 +11,7 @@ import Marin from './marin';
 import AnimeSaturn from './animesaturn';
 import AnimeUnity from './animeunity';
 
-export default {
+const providers = {
   Gogoanime,
   NineAnime,
   AnimePahe,
@@ -25,3 +25,5 @@ export default {
   AnimeSaturn,
   AnimeUnity,
 };
+
+export default providers;
