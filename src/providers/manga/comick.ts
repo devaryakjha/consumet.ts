@@ -37,7 +37,7 @@ class ComicK extends MangaParser {
         description: data.desc,
         genres: data.md_comic_md_genres?.map(genre => genre.md_genres.name),
         status: data.status ?? 0 === 0 ? MediaStatus.ONGOING : MediaStatus.COMPLETED,
-        image: `https://meo.comick.pictures${data.md_covers ? data.md_covers[0].b2key : ''}`,
+        image: `https://meo2.comick.pictures/${data.md_covers ? data.md_covers[0].b2key : ''}`,
         malId: data.links?.mal,
         links: links,
         chapters: [],
@@ -133,7 +133,7 @@ class ComicK extends MangaParser {
         }
 
         results.results.push({
-          id: manga.slug,
+          id: manga.hid || manga.slug || manga.id.toString(),
           title: manga.title ?? manga.slug,
           altTitles: altTitles,
           image: cover as string,
@@ -190,6 +190,7 @@ interface SearchResult {
   md_titles: [MDTitle];
   md_covers: Array<Cover>;
   highlight: string;
+  hid?: string;
 }
 
 interface Cover {

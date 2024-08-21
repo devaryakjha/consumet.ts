@@ -31,7 +31,7 @@ class ComicK extends models_1.MangaParser {
                     description: data.desc,
                     genres: (_b = data.md_comic_md_genres) === null || _b === void 0 ? void 0 : _b.map(genre => genre.md_genres.name),
                     status: ((_c = data.status) !== null && _c !== void 0 ? _c : 0 === 0) ? models_1.MediaStatus.ONGOING : models_1.MediaStatus.COMPLETED,
-                    image: `https://meo.comick.pictures${data.md_covers ? data.md_covers[0].b2key : ''}`,
+                    image: `https://meo2.comick.pictures/${data.md_covers ? data.md_covers[0].b2key : ''}`,
                     malId: (_d = data.links) === null || _d === void 0 ? void 0 : _d.mal,
                     links: links,
                     chapters: [],
@@ -112,7 +112,7 @@ class ComicK extends models_1.MangaParser {
                         }
                     }
                     results.results.push({
-                        id: manga.slug,
+                        id: manga.hid || manga.slug || manga.id.toString(),
                         title: (_a = manga.title) !== null && _a !== void 0 ? _a : manga.slug,
                         altTitles: altTitles,
                         image: cover,
