@@ -133,7 +133,7 @@ class ComicK extends MangaParser {
         }
 
         results.results.push({
-          id: manga.hid || manga.slug || manga.id.toString(),
+          id: manga.slug,
           title: manga.title ?? manga.slug,
           altTitles: altTitles,
           image: cover as string,

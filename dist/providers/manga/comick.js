@@ -112,7 +112,7 @@ class ComicK extends models_1.MangaParser {
                         }
                     }
                     results.results.push({
-                        id: manga.hid || manga.slug || manga.id.toString(),
+                        id: manga.slug,
                         title: (_a = manga.title) !== null && _a !== void 0 ? _a : manga.slug,
                         altTitles: altTitles,
                         image: cover,
