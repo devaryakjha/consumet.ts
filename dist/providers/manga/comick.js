@@ -80,7 +80,7 @@ class ComicK extends models_1.MangaParser {
          * @param page page number (default: 1)
          * @param limit limit of results to return (default: 20) (max: 100) (min: 1)
          */
-        this.search = async (query, page = 1, limit = 20) => {
+        this.search = async (query, page = 1, limit = 49) => {
             var _a;
             if (page < 1)
                 throw new Error('Page number must be greater than 1');

@@ -95,7 +95,7 @@ class ComicK extends MangaParser {
   override search = async (
     query: string,
     page: number = 1,
-    limit: number = 20
+    limit: number = 49
   ): Promise<ISearch<IMangaResult>> => {
     if (page < 1) throw new Error('Page number must be greater than 1');
     if (limit > 300) throw new Error('Limit must be less than or equal to 300');
