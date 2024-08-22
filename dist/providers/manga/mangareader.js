@@ -57,7 +57,8 @@ class MangaReader extends models_1.MangaParser {
                     .map((i, genre) => $(genre).text().trim())
                     .get();
                 mangaInfo.chapters = container
-                    .find(`div.chapters-list-ul ul li`)
+                    .find(`div.chapters-list-ul ul`)
+                    .find(`#en-chapters li`)
                     .map((i, el) => {
                     var _a;
                     return ({
@@ -81,7 +82,7 @@ class MangaReader extends models_1.MangaParser {
                 if (!readingId) {
                     throw new Error('Unable to find pages');
                 }
-                const ajaxURL = `https://mangareader.to/ajax/image/list/chap/${readingId}?mode=vertical&quality=high`;
+                const ajaxURL = `https://mangareader.to/ajax/image/list/chap/${readingId}?mode=vertical&quality=high&hozPageSize=1`;
                 const { data: pagesData } = await this.client.get(ajaxURL);
                 const $PagesHTML = (0, cheerio_1.load)(pagesData.html);
                 const pagesSelector = $PagesHTML('div#main-wrapper div.container-reader-chapter div.iv-card');

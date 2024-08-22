@@ -281,7 +281,7 @@ class MangaDex extends models_1.MangaParser {
             if (((_a = res === null || res === void 0 ? void 0 : res.data) === null || _a === void 0 ? void 0 : _a.offset) + 96 >= ((_b = res === null || res === void 0 ? void 0 : res.data) === null || _b === void 0 ? void 0 : _b.total)) {
                 return [];
             }
-            const response = await this.client.get(`${this.apiUrl}/manga/${mangaId}/feed?offset=${offset}&limit=96&order[volume]=desc&order[chapter]=desc`);
+            const response = await this.client.get(`${this.apiUrl}/manga/${mangaId}/feed?offset=${offset}&limit=96&order[volume]=desc&order[chapter]=desc&translatedLanguage[]=en`);
             return [...response.data.data, ...(await this.fetchAllChapters(mangaId, offset + 96, response))];
         };
         this.fetchCoverImage = async (coverId) => {
