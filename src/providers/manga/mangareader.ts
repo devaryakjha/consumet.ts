@@ -70,8 +70,8 @@ class MangaReader extends MangaParser {
         .find(`div.chapters-list-ul ul li`)
         // .find(`#en-chapters li`)
         .map((i, el): IMangaChapter => {
-          // id of li item is in the pattern en-chapters, so find out what is the id first
-          const id = $(el).attr('id'); // en-chapters
+          // id of ul parent of this li element item is in the pattern en-chapters, so find out what is the id first
+          const id = $(el).parent().attr('id');
           return {
             language: id?.split('-')[0] ?? 'en',
             id: $(el).find('a').attr('href')?.split('/read/')[1]!,
