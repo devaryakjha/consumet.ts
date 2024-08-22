@@ -105,7 +105,7 @@ class MangaReader extends MangaParser {
         .map((i, el): IMangaChapterPage => {
           const img = $(el).attr('data-url')!.replace('&amp;', '&');
           return {
-            img: 'https://chibi.aryak.dev/unshuffle?imgUrl=' + encodeURIComponent(img),
+            img: 'https://chibi.aryak.dev/unshuffle/' + encodeURIComponent(img),
             page: i + 1,
           };
         })
