@@ -28,19 +28,25 @@ class MangaDex extends MangaParser {
           .map((tag: any) => tag.attributes.name.en),
         status: capitalizeFirstLetter(data.data.attributes.status) as MediaStatus,
         releaseDate: data.data.attributes.year,
-        chapters: [],
+        chapters: {},
       };
 
       const allChapters = await this.fetchAllChapters(mangaId, 0);
       for (const chapter of allChapters) {
-        mangaInfo.chapters?.push({
-          id: chapter.id,
-          title: chapter.attributes.title ? chapter.attributes.title : chapter.attributes.chapter,
-          chapterNumber: chapter.attributes.chapter,
-          volumeNumber: chapter.attributes.volume,
-          pages: chapter.attributes.pages,
-          language: chapter.attributes.translatedLanguage,
-        });
+        const key = chapter.attributes.volume ? `Volumne ${chapter.attributes.volume}` : 'No Volume';
+        if (!mangaInfo.chapters?.[key]) mangaInfo.chapters![key] = [];
+        const pages = chapter.attributes.pages;
+        // only proceed is pages is a number and greater than 0
+        if (pages && !isNaN(pages) && pages > 0) {
+          mangaInfo.chapters?.[key]?.push({
+            id: chapter.id,
+            title: chapter.attributes.title ? chapter.attributes.title : chapter.attributes.chapter,
+            chapterNumber: chapter.attributes.chapter,
+            volumeNumber: chapter.attributes.volume,
+            pages: chapter.attributes.pages,
+            language: chapter.attributes.translatedLanguage,
+          });
+        }
       }
 
       const findCoverArt = data.data.relationships.find((rel: any) => rel.type === 'cover_art');
@@ -324,7 +330,7 @@ class MangaDex extends MangaParser {
     }
 
     const response = await this.client.get(
-      `${this.apiUrl}/manga/${mangaId}/feed?offset=${offset}&limit=96&order[volume]=desc&order[chapter]=desc&translatedLanguage[]=en`
+      `${this.apiUrl}/manga/${mangaId}/feed?offset=${offset}&limit=96&order[volume]=asc&order[chapter]=asc&translatedLanguage[]=en`
     );
 
     return [...response.data.data, ...(await this.fetchAllChapters(mangaId, offset + 96, response))];

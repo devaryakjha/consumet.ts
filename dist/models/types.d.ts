@@ -208,7 +208,7 @@ export interface IMangaInfo extends IMangaResult {
     links?: string[];
     characters?: any[];
     recommendations?: IMangaResult[];
-    chapters?: IMangaChapter[];
+    chapters?: Record<string, IMangaChapter[]>;
 }
 export interface IMangaChapterPage {
     img: string;

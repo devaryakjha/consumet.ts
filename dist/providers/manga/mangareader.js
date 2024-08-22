@@ -56,12 +56,11 @@ class MangaReader extends models_1.MangaParser {
                     .find('div.sort-desc div.genres a')
                     .map((i, genre) => $(genre).text().trim())
                     .get();
-                mangaInfo.chapters = container
+                const chapters = container
                     .find(`div.chapters-list-ul ul li`)
                     // .find(`#en-chapters li`)
                     .map((i, el) => {
                     var _a, _b;
-                    // id of ul parent of this li element item is in the pattern en-chapters, so find out what is the id first
                     const id = $(el).parent().attr('id');
                     return {
                         language: (_a = id === null || id === void 0 ? void 0 : id.split('-')[0]) !== null && _a !== void 0 ? _a : 'en',
@@ -71,6 +70,25 @@ class MangaReader extends models_1.MangaParser {
                     };
                 })
                     .get();
+                for (const chapter of chapters) {
+                    let key = chapter.language;
+                    key =
+                        {
+                            en: 'English Chapters',
+                            es: 'Spanish Chapters',
+                            ja: 'Japanese Chapters',
+                        }[key] || key;
+                    if (!mangaInfo.chapters) {
+                        mangaInfo.chapters = { [key]: [] };
+                    }
+                    if (!mangaInfo.chapters[key]) {
+                        mangaInfo.chapters[key] = [];
+                    }
+                    mangaInfo.chapters[key].push(chapter);
+                }
+                // reverse chapters
+                if (!!mangaInfo.chapters)
+                    mangaInfo.chapters = Object.fromEntries(Object.entries(mangaInfo.chapters).map(([key, value]) => [key, value.reverse()]));
                 return mangaInfo;
             }
             catch (err) {

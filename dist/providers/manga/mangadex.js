@@ -12,7 +12,7 @@ class MangaDex extends models_1.MangaParser {
         this.classPath = 'MANGA.MangaDex';
         this.apiUrl = 'https://api.mangadex.org';
         this.fetchMangaInfo = async (mangaId) => {
-            var _a;
+            var _a, _b, _c;
             try {
                 const { data } = await this.client.get(`${this.apiUrl}/manga/${mangaId}`);
                 const mangaInfo = {
@@ -28,18 +28,25 @@ class MangaDex extends models_1.MangaParser {
                         .map((tag) => tag.attributes.name.en),
                     status: (0, utils_1.capitalizeFirstLetter)(data.data.attributes.status),
                     releaseDate: data.data.attributes.year,
-                    chapters: [],
+                    chapters: {},
                 };
                 const allChapters = await this.fetchAllChapters(mangaId, 0);
                 for (const chapter of allChapters) {
-                    (_a = mangaInfo.chapters) === null || _a === void 0 ? void 0 : _a.push({
-                        id: chapter.id,
-                        title: chapter.attributes.title ? chapter.attributes.title : chapter.attributes.chapter,
-                        chapterNumber: chapter.attributes.chapter,
-                        volumeNumber: chapter.attributes.volume,
-                        pages: chapter.attributes.pages,
-                        language: chapter.attributes.translatedLanguage,
-                    });
+                    const key = chapter.attributes.volume ? `Volumne ${chapter.attributes.volume}` : 'No Volume';
+                    if (!((_a = mangaInfo.chapters) === null || _a === void 0 ? void 0 : _a[key]))
+                        mangaInfo.chapters[key] = [];
+                    const pages = chapter.attributes.pages;
+                    // only proceed is pages is a number and greater than 0
+                    if (pages && !isNaN(pages) && pages > 0) {
+                        (_c = (_b = mangaInfo.chapters) === null || _b === void 0 ? void 0 : _b[key]) === null || _c === void 0 ? void 0 : _c.push({
+                            id: chapter.id,
+                            title: chapter.attributes.title ? chapter.attributes.title : chapter.attributes.chapter,
+                            chapterNumber: chapter.attributes.chapter,
+                            volumeNumber: chapter.attributes.volume,
+                            pages: chapter.attributes.pages,
+                            language: chapter.attributes.translatedLanguage,
+                        });
+                    }
                 }
                 const findCoverArt = data.data.relationships.find((rel) => rel.type === 'cover_art');
                 const coverArt = await this.fetchCoverImage(findCoverArt === null || findCoverArt === void 0 ? void 0 : findCoverArt.id);
@@ -281,7 +288,7 @@ class MangaDex extends models_1.MangaParser {
             if (((_a = res === null || res === void 0 ? void 0 : res.data) === null || _a === void 0 ? void 0 : _a.offset) + 96 >= ((_b = res === null || res === void 0 ? void 0 : res.data) === null || _b === void 0 ? void 0 : _b.total)) {
                 return [];
             }
-            const response = await this.client.get(`${this.apiUrl}/manga/${mangaId}/feed?offset=${offset}&limit=96&order[volume]=desc&order[chapter]=desc&translatedLanguage[]=en`);
+            const response = await this.client.get(`${this.apiUrl}/manga/${mangaId}/feed?offset=${offset}&limit=96&order[volume]=asc&order[chapter]=asc&translatedLanguage[]=en`);
             return [...response.data.data, ...(await this.fetchAllChapters(mangaId, offset + 96, response))];
         };
         this.fetchCoverImage = async (coverId) => {
