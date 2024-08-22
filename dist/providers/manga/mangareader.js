@@ -87,10 +87,13 @@ class MangaReader extends models_1.MangaParser {
                 const $PagesHTML = (0, cheerio_1.load)(pagesData.html);
                 const pagesSelector = $PagesHTML('div#main-wrapper div.container-reader-chapter div.iv-card');
                 const pages = pagesSelector
-                    .map((i, el) => ({
-                    img: $(el).attr('data-url').replace('&amp;', '&'),
-                    page: i + 1,
-                }))
+                    .map((i, el) => {
+                    const img = $(el).attr('data-url').replace('&amp;', '&');
+                    return {
+                        img: 'https://chibi.aryak.dev/unshuffle/' + encodeURIComponent(img),
+                        page: i + 1,
+                    };
+                })
                     .get();
                 return pages;
             }
