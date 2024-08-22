@@ -103,9 +103,11 @@ class MangaReader extends MangaParser {
 
       const pages = pagesSelector
         .map((i, el): IMangaChapterPage => {
-          const img = $(el).attr('data-url')!.replace('&amp;', '&');
+          const element = $(el);
+          const isShuffled = element.hasClass('shuffled');
+          const img = element.attr('data-url')!.replace('&amp;', '&');
           return {
-            img: 'https://chibi.aryak.dev/unshuffle/' + encodeURIComponent(img),
+            img: isShuffled ? 'https://chibi.aryak.dev/unshuffle/' + encodeURIComponent(img) : img,
             page: i + 1,
           };
         })
