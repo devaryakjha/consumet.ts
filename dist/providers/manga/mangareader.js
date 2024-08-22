@@ -57,15 +57,18 @@ class MangaReader extends models_1.MangaParser {
                     .map((i, genre) => $(genre).text().trim())
                     .get();
                 mangaInfo.chapters = container
-                    .find(`div.chapters-list-ul ul`)
-                    .find(`#en-chapters li`)
+                    .find(`div.chapters-list-ul ul li`)
+                    // .find(`#en-chapters li`)
                     .map((i, el) => {
-                    var _a;
-                    return ({
-                        id: (_a = $(el).find('a').attr('href')) === null || _a === void 0 ? void 0 : _a.split('/read/')[1],
+                    var _a, _b;
+                    // id of li item is in the pattern en-chapters, so find out what is the id first
+                    const id = $(el).attr('id'); // en-chapters
+                    return {
+                        language: (_a = id === null || id === void 0 ? void 0 : id.split('-')[0]) !== null && _a !== void 0 ? _a : 'en',
+                        id: (_b = $(el).find('a').attr('href')) === null || _b === void 0 ? void 0 : _b.split('/read/')[1],
                         title: $(el).find('a').attr('title').trim(),
                         chapter: $(el).find('a span.name').text().split('Chapter ')[1].split(':')[0],
-                    });
+                    };
                 })
                     .get();
                 return mangaInfo;
