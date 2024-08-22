@@ -51,6 +51,7 @@ class Mangasee123 extends models_1.MangaParser {
         this.fetchChapterPages = async (chapterId, ...args) => {
             const images = [];
             const url = `${this.baseUrl}/read-online/${chapterId}-page-1.html`;
+            console.log({ url });
             try {
                 const { data } = await this.client.get(`${url}`);
                 const $ = (0, cheerio_1.load)(data);
@@ -60,9 +61,12 @@ class Mangasee123 extends models_1.MangaParser {
                     const imageHost = this.processScriptTagVariable(chapterScript.data, 'vm.CurPathName = ');
                     const curChapterLength = Number(curChapter['Page']);
                     for (let i = 0; i < curChapterLength; i++) {
-                        const chapter = this.processChapterForImageUrl(chapterId.replace(/[^0-9.]/g, ''));
+                        // e.g Yamada-kun-to-Lv999-no-Koi-wo-Suru-chapter-107
+                        const splits = chapterId.split('-chapter-', 2);
+                        const chapter = this.processChapterForImageUrl(splits[1].replace(/[^0-9.]/g, ''));
+                        console.log({ chapterId });
                         const page = `${i + 1}`.padStart(3, '0');
-                        const mangaId = chapterId.split('-chapter-', 1)[0];
+                        const mangaId = splits[0];
                         const imagePath = `https://${imageHost}/manga/${mangaId}/${chapter}-${page}.png`;
                         images.push(imagePath);
                     }
